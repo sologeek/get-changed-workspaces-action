@@ -1,4 +1,4 @@
-name: Get changed workspaces
+name: Get some package changed in workspaces
 description: A github action that gets changed workspaces
 author: Aleksandras Sukelovic <alex.shukel@gmail.com>
 inputs:
