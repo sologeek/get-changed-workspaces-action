@@ -39,7 +39,7 @@ export const run = async () => {
         }
     });
 
+    setOutput("allPackages", allPackages);
     setOutput("packages", packages);
     setOutput("empty", packages.length === 0);
-    setOutput("allPackages", allPackages);
 };
