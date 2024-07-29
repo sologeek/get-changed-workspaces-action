@@ -20,6 +20,7 @@ export const run = async () => {
     const workspaces = await getWorkspaces();
 
     const packages: Package[] = [];
+    const allPackages: Package[] = [];
 
     const filter = getInput("filter");
 
@@ -30,16 +31,15 @@ export const run = async () => {
     const filterRegex = new RegExp(filter);
 
     workspaces.forEach((workspacePath, name) => {
-        if (
-            filterRegex.test(name) &&
-            minimatch.match(changedFiles, path.join(workspacePath, "**"), {
-                dot: true,
-            }).length > 0
-        ) {
-            packages.push({ name, path: workspacePath });
+        if (filterRegex.test(name)) {
+            allPackages.push({ name, path: workspacePath });
+            if (minimatch.match(changedFiles, path.join(workspacePath, "**"), { dot: true, }).length > 0) {
+                packages.push({ name, path: workspacePath });
+            }
         }
     });
 
     setOutput("packages", packages);
     setOutput("empty", packages.length === 0);
+    setOutput("allPackages", allPackages);
 };
