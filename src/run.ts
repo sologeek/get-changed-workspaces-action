@@ -7,10 +7,12 @@ import { getChangedFiles } from "./getChangedFiles";
 import { getRootDirectory } from "./getRootDirectory";
 import { getWorkspaces } from "./getWorkspaces";
 import { isValidRegex } from "./isValidRegex";
+import { getRelativeWorkspaces } from "./getRelativeDirectory";
 
 type Package = {
     name: string;
     path: string;
+    relativePath: string;
 };
 
 export const run = async () => {
@@ -18,6 +20,12 @@ export const run = async () => {
     const gitRoot = await getRootDirectory();
     const changedFiles = (await getChangedFiles()).map((file) => path.join(gitRoot, file));
     const workspaces = await getWorkspaces();
+    const relativeWorkspaces = await getRelativeWorkspaces();
+    const relativePathMap = new Map<string, string>();
+
+    relativeWorkspaces.forEach((workspacePath, name) => {
+        relativePathMap.set(name, workspacePath);
+    });
 
     const packages: Package[] = [];
     const allPackages: Package[] = [];
@@ -32,9 +40,9 @@ export const run = async () => {
 
     workspaces.forEach((workspacePath, name) => {
         if (filterRegex.test(name)) {
-            allPackages.push({ name, path: workspacePath });
+            allPackages.push({ name, path: workspacePath, relativePath: relativePathMap.get(name) || "" });
             if (minimatch.match(changedFiles, path.join(workspacePath, "**"), { dot: true, }).length > 0) {
-                packages.push({ name, path: workspacePath });
+                packages.push({ name, path: workspacePath, relativePath: relativePathMap.get(name) || "" });
             }
         }
     });
