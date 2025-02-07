@@ -4,10 +4,10 @@ import { getInput, setFailed, setOutput } from "@actions/core";
 import minimatch from "minimatch";
 
 import { getChangedFiles } from "./getChangedFiles";
+import { getRelativeWorkspaces } from "./getRelativeDirectory";
 import { getRootDirectory } from "./getRootDirectory";
 import { getWorkspaces } from "./getWorkspaces";
 import { isValidRegex } from "./isValidRegex";
-import { getRelativeWorkspaces } from "./getRelativeDirectory";
 
 type Package = {
     name: string;
@@ -41,7 +41,7 @@ export const run = async () => {
     workspaces.forEach((workspacePath, name) => {
         if (filterRegex.test(name)) {
             allPackages.push({ name, path: workspacePath, relativePath: relativePathMap.get(name) || "" });
-            if (minimatch.match(changedFiles, path.join(workspacePath, "**"), { dot: true, }).length > 0) {
+            if (minimatch.match(changedFiles, path.join(workspacePath, "**"), { dot: true }).length > 0) {
                 packages.push({ name, path: workspacePath, relativePath: relativePathMap.get(name) || "" });
             }
         }
