@@ -17,6 +17,9 @@ inputs:
             push event occurs. Will default to the last commit of the current branch
         required: false
         default: ${{ github.ref }}
+    changed-files:
+        description: Array of changed files
+        required: true
 outputs:
     packages:
         description: Array of changed packages, each containing its name and path
