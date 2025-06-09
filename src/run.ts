@@ -94,7 +94,6 @@ export const run = async () => {
 
     console.log(`Final changed biz packages: ${bizChangedPackages.map(pkg => pkg.name).join(", ")}`);
 
-
     setOutput("allPackages", allBizPackages);
     setOutput("packages", bizChangedPackages);
     setOutput("empty", bizChangedPackages.length === 0);
